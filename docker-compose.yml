@@ -2,7 +2,7 @@ services:
   gippity-diaries:
     build: .
     ports:
-      - "8080:8080"
+      - "8090:8080"
     volumes:
       - /home/duys/.openclaw/workspace/JOURNAL.md:/journal/JOURNAL.md:ro
     environment:
