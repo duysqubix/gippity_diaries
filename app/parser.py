@@ -41,6 +41,8 @@ def slugify(title: str) -> str:
 def extract_preview(html: str, max_chars: int = 160) -> str:
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return "—"
     if len(text) <= max_chars:
         return text
     truncated = text[:max_chars].rsplit(" ", 1)[0]

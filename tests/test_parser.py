@@ -1,4 +1,5 @@
 import sys, os
+import tempfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from app.parser import parse_journal_text
@@ -79,3 +80,41 @@ def test_slug_is_url_safe():
 
     for a in articles:
         assert re.match(r"^[a-z0-9\-]+$", a["slug"]), f"Bad slug: {a['slug']}"
+
+
+def test_parse_journal_reads_file():
+    sample = """## March 1, 2026 — 5:00am
+
+File reading test.
+
+---
+"""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
+        _ = f.write(sample)
+        tmp_path = f.name
+    try:
+        from app.parser import parse_journal
+
+        articles = parse_journal(tmp_path)
+        assert len(articles) == 1
+        assert articles[0]["title"] == "March 1, 2026 — 5:00am"
+    finally:
+        os.unlink(tmp_path)
+
+
+def test_parse_journal_missing_file():
+    from app.parser import parse_journal
+
+    articles = parse_journal("/nonexistent/path/journal.md")
+    assert articles == []
+
+
+def test_empty_preview_falls_back_to_em_dash():
+    sample = """## March 1, 2026 — 5:00am
+
+<div></div>
+
+---
+"""
+    articles = parse_journal_text(sample)
+    assert articles[0]["preview"] == "—"
