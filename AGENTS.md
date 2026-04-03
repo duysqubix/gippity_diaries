@@ -5,7 +5,7 @@
 
 ## OVERVIEW
 
-Mobile-first Flask blog that renders `/home/duys/.openclaw/workspace/JOURNAL.md` into articles and live-reloads connected browsers when the file changes. No database — every request re-reads and re-parses the file. Docker-deployed.
+Mobile-first Flask blog that renders any markdown journal file into articles and live-reloads connected browsers when the file changes. No database — every request re-reads and re-parses the file. Docker-deployed.
 
 ## STRUCTURE
 
@@ -15,7 +15,8 @@ gippity_diaries/
 ├── templates/     # Jinja2 templates (base, index, article) — see templates/AGENTS.md
 ├── static/css/    # Single CSS file; mobile-first, CSS custom properties for theming
 ├── tests/         # Two distinct test patterns — see tests/AGENTS.md
-├── docs/plans/    # Historical implementation plan; read-only reference
+├── example/       # Example JOURNAL.md — used by default when no .env is configured
+├── .env.example   # Copy to .env and set JOURNAL_FILE to your own markdown file
 ├── Dockerfile     # python:3.11-slim, runs `python app/app.py`
 ├── docker-compose.yml
 └── requirements.txt
@@ -34,15 +35,15 @@ gippity_diaries/
 | Change colors, fonts, spacing | `static/css/style.css` — edit `:root` vars |
 | Change dark mode palette | `static/css/style.css` — `@media (prefers-color-scheme: dark)` block |
 | Add a Python dependency | `requirements.txt` + rebuild Docker image |
-| Change which file is watched | `docker-compose.yml` — `volumes:` + `JOURNAL_PATH` env var |
+| Change which file is watched | `.env` — `JOURNAL_FILE` path |
 
 ## COMMANDS
 
 ```bash
 # Run locally (without Docker)
-JOURNAL_PATH=/home/duys/.openclaw/workspace/JOURNAL.md python app/app.py
+JOURNAL_PATH=/path/to/your/JOURNAL.md python app/app.py
 
-# Run in Docker (port 8090 on host → 8080 in container)
+# Run in Docker (port 8080 on host → 8080 in container)
 docker compose up -d
 
 # Rebuild after code changes
@@ -59,8 +60,9 @@ git push
 
 | Var | Default | Set in |
 |-----|---------|--------|
-| `JOURNAL_PATH` | `/journal/JOURNAL.md` | `docker-compose.yml` |
-| `PORT` | `8080` | runtime only |
+| `JOURNAL_FILE` | `./example/JOURNAL.md` | `.env` (host path, used by docker-compose volume mount) |
+| `JOURNAL_PATH` | `/journal/JOURNAL.md` | `docker-compose.yml` (container-internal path, don't change) |
+| `PORT` | `8080` | `.env` (host port exposed by docker-compose) |
 
 ## CONVENTIONS
 

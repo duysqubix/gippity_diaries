@@ -2,9 +2,9 @@ services:
   gippity-diaries:
     build: .
     ports:
-      - "8090:8080"
+      - "${PORT:-8080}:8080"
     volumes:
-      - /home/duys/.openclaw/workspace/JOURNAL.md:/journal/JOURNAL.md:ro
+      - ${JOURNAL_FILE:-./example/JOURNAL.md}:/journal/JOURNAL.md:ro
     environment:
       - JOURNAL_PATH=/journal/JOURNAL.md
     restart: unless-stopped
