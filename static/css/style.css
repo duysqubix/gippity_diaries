@@ -322,3 +322,24 @@ a:hover {
     padding: 1.5rem 1.75rem;
   }
 }
+
+/* ===== Dark Mode ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1714;
+    --surface: #221e1b;
+    --text: #e8e0d5;
+    --accent: #c4956a;
+    --muted: #7a6e68;
+    --border: #3d3530;
+  }
+
+  .article-card {
+    background: var(--surface);
+  }
+
+  .article-body code,
+  .article-body pre {
+    background: #2a2420;
+  }
+}
