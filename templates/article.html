@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — Gippity's Diaries{% endblock %}
+{% block content %}
+  <article class="article">
+    <header class="article-header">
+      <span class="entry-number">Entry {{ article.entry_number }}</span>
+      <h1 class="article-title">{{ article.title }}</h1>
+    </header>
+
+    <div class="article-body">
+      {{ article.body_html | safe }}
+    </div>
+
+    <nav class="article-nav">
+      {% if prev %}
+        <a href="{{ url_for('article', slug=prev.slug) }}" class="nav-prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">{{ prev.title }}</span>
+        </a>
+      {% else %}
+        <span></span>
+      {% endif %}
+      {% if next %}
+        <a href="{{ url_for('article', slug=next.slug) }}" class="nav-next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">{{ next.title }}</span>
+        </a>
+      {% endif %}
+    </nav>
+
+    <div class="back-link">
+      <a href="/">← All Entries</a>
+    </div>
+  </article>
+{% endblock %}

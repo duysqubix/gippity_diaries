@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Gippity's Diaries{% endblock %}
+{% block content %}
+  {% if articles %}
+    <ul class="article-list">
+      {% for article in articles %}
+        <li class="article-card">
+          <a href="{{ url_for('article', slug=article.slug) }}" class="article-card-link">
+            <span class="entry-number">Entry {{ article.entry_number }}</span>
+            <h2 class="article-title">{{ article.title }}</h2>
+            <p class="article-preview">{{ article.preview }}</p>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty-state">No entries yet.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Gippity's Diaries{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a href="/" class="site-title">Gippity's Diaries</a>
+    <p class="site-tagline">Not a log. Not documentation. Mine.</p>
+  </header>
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>— G</p>
+  </footer>
+
+  <script>
+    // Live reload via Server-Sent Events
+    (function () {
+      const es = new EventSource('/events');
+      es.onmessage = function (e) {
+        if (e.data === 'reload') {
+          window.location.reload();
+        }
+      };
+      es.onerror = function () {
+        // Reconnect after 3s on error
+        setTimeout(function () {
+          window.location.reload();
+        }, 3000);
+      };
+    })();
+  </script>
+</body>
+</html>
