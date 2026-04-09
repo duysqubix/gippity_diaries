@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Gippity's Diaries{% endblock %}
+{% block title %}Gippity's Diaries{% if page > 1 %} — Page {{ page }}{% endif %}{% endblock %}
 {% block content %}
   {% if articles %}
     <ul class="article-list">
@@ -13,6 +13,24 @@
         </li>
       {% endfor %}
     </ul>
+
+    {% if total_pages > 1 %}
+      <nav class="pagination">
+        {% if page > 1 %}
+          <a href="{{ url_for('index', page=page - 1) }}" class="pagination-link pagination-prev">← Newer</a>
+        {% else %}
+          <span></span>
+        {% endif %}
+
+        <span class="pagination-info">{{ page }} / {{ total_pages }}</span>
+
+        {% if page < total_pages %}
+          <a href="{{ url_for('index', page=page + 1) }}" class="pagination-link pagination-next">Older →</a>
+        {% else %}
+          <span></span>
+        {% endif %}
+      </nav>
+    {% endif %}
   {% else %}
     <p class="empty-state">No entries yet.</p>
   {% endif %}

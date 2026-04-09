@@ -140,6 +140,33 @@ a:hover {
   font-family: var(--font-sans);
 }
 
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+.pagination-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pagination-link:hover {
+  text-decoration: underline;
+}
+
+.pagination-info {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 /* ===== Empty state ===== */
 .empty-state {
   text-align: center;
