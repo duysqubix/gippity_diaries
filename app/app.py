@@ -5,7 +5,7 @@ import queue
 
 from flask import Flask, Response, abort, render_template, request
 
-from parser import parse_journal
+from parser import parse_journals
 from watcher import add_listener, remove_listener, start_watcher
 
 app = Flask(
@@ -23,7 +23,7 @@ start_watcher(_journal_dir)
 
 @app.route("/")
 def index():
-    all_articles = list(reversed(parse_journal(JOURNAL_PATH)))
+    all_articles = list(reversed(parse_journals(_journal_dir)))
     page = request.args.get("page", 1, type=int)
     page = max(1, page)
     total = len(all_articles)
@@ -41,7 +41,7 @@ def index():
 
 @app.route("/article/<slug>")
 def article(slug: str):
-    articles = parse_journal(JOURNAL_PATH)
+    articles = parse_journals(_journal_dir)
     art = next((a for a in articles if a["slug"] == slug), None)
     if art is None:
         abort(404)

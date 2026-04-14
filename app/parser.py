@@ -1,3 +1,4 @@
+import os
 import re
 from collections.abc import Callable
 from typing import TypedDict, cast
@@ -87,3 +88,35 @@ def parse_journal(filepath: str) -> list[Article]:
             return parse_journal_text(f.read())
     except (FileNotFoundError, PermissionError):
         return []
+
+
+def _journal_sort_key(filename: str) -> int:
+    match = re.match(r"^JOURNAL(\d*)\.md$", filename, re.IGNORECASE)
+    if not match:
+        return 0
+    return int(match.group(1)) if match.group(1) else 1
+
+
+def parse_journals(journal_dir: str) -> list[Article]:
+    """Read all JOURNAL*.md files in journal_dir (oldest first) and return combined articles."""
+    try:
+        filenames = [
+            f
+            for f in os.listdir(journal_dir)
+            if re.match(r"^JOURNAL\d*\.md$", f, re.IGNORECASE)
+        ]
+    except (FileNotFoundError, PermissionError):
+        return []
+
+    filenames.sort(key=_journal_sort_key)
+
+    chunks: list[str] = []
+    for filename in filenames:
+        filepath = os.path.join(journal_dir, filename)
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                chunks.append(f.read())
+        except (FileNotFoundError, PermissionError):
+            pass
+
+    return parse_journal_text("\n\n---\n\n".join(chunks))
